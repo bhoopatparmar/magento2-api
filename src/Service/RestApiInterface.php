@@ -45,5 +45,4 @@ interface RestApiInterface
      * @throws \Exception
      */
     public function get(string $uri);
-
 }
