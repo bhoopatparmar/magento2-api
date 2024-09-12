@@ -13,25 +13,16 @@ class Order implements OrderInterface
     protected $restApi;
 
     /**
-     * Authentication token for API requests.
-     *
-     * @var string
-     */
-    protected $authentication;
-
-    /**
      * Order constructor.
      *
      * @param string $baseUri
-     * @param string $authType
-     * @param array|string $credentials
+     * @param array $credentials
      */
     public function __construct(
         string $baseUri,
-        string $authType,
-        $credentials
+        array $credentials
     ) {
-        $this->restApi = new RestApi($baseUri, $authType, $credentials);
+        $this->restApi = new RestApi($baseUri, $credentials);
     }
 
     /**

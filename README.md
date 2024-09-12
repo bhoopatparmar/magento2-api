@@ -16,7 +16,7 @@ The library supports two types of authentication:
 # Installation
 You can install the library using Composer:
 ```
-    composer require salecto2/magento2-api`
+    composer require salecto2/library-magento2-api
 ```
 
 # Rest Api Example usage:
@@ -24,30 +24,31 @@ You can install the library using Composer:
 ### Using Bearer token:
 ```
 <?php
-use Salecto\Magento2Api\Model\Order;
 
 $baseUri = 'https://your-magento-domain.com/';
-$authType = 'Bearer';
-$credentials = 'your-bearer-token';
+$credentials = [
+    'auth_type' => 'Bearer',
+    'auth_key' => 'your-bearer-token'
+];
 
-$order = new Order($baseUri, $authType, $credentials);
+$order = new Salecto\Magento2Api\Model\Order($baseUri, $credentials);
 
 ```
 
 ### Using OAuth 1.0 Authentication:
 ```
 <?php
-use Salecto\Magento2Api\Model\Order;
-
 $baseUri = 'https://your-magento-domain.com/';
-$authType = 'OAuth1';
 $credentials = [
-    'consumer_key'    => 'your-consumer-key',
-    'consumer_secret' => 'your-consumer-secret',
-    'token'           => 'your-token',
-    'token_secret'    => 'your-token-secret',
+    'auth_type' => 'OAuth1',
+    'auth_key' => [
+        'consumer_key'    => 'your-consumer-key',
+        'consumer_secret' => 'your-consumer-secret',
+        'token'           => 'your-token',
+        'token_secret'    => 'your-token-secret',
+    ]
 ];
 
-$order = new Order($baseUri, $authType, $credentials);
+$order = new Salecto\Magento2Api\Model\Order($baseUri, $credentials);
 
 ```

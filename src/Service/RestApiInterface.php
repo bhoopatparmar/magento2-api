@@ -12,6 +12,10 @@ interface RestApiInterface
 
     const POST_REQUEST = 'POST';
 
+    const PUT_REQUEST = 'PUT';
+
+    const DELETE_REQUEST = 'DELETE';
+
     const AUTH_BEARER = 'Bearer';
 
     const AUTH_OAUTH1 = 'OAuth1';
@@ -36,6 +40,24 @@ interface RestApiInterface
      * @throws \Exception
      */
     public function post(string $uri, array $data);
+
+    /**
+     * Make a PUT request to the API.
+     *
+     * @param string $uri
+     * @return array|string
+     * @throws \Exception
+     */
+    public function put(string $uri, array $data);
+
+    /**
+     * Make a DELETE request to the API.
+     *
+     * @param string $uri
+     * @return array|string
+     * @throws \Exception
+     */
+    public function delete(string $uri);
 
     /**
      * Make a GET request to the API.

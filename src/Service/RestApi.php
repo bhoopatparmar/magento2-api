@@ -46,17 +46,15 @@ class RestApi implements RestApiInterface
      * RestApi constructor.
      *
      * @param string $baseUri
-     * @param string $authType
-     * @param array|string $credentials
+     * @param array $credentials
      */
     public function __construct(
         string $baseUri,
-        string $authType,
-        $credentials
+        array $credentials
     ) {
         $this->baseUri = rtrim($baseUri, '/') . '/';
-        $this->authType = $authType;
-        $this->credentials = $credentials;
+        $this->authType = $credentials['auth_type'];
+        $this->credentials = $credentials['auth_key'];
         $this->client = $this->initializeClient();
     }
 
@@ -69,20 +67,19 @@ class RestApi implements RestApiInterface
     {
         $clientOptions['base_uri'] = $this->baseUri;
 
-        if ($this->authType === self::AUTH_OAUTH1) {
+        if ($this->authType === self::AUTH_OAUTH1 && is_array($this->credentials)) {
             $stack = HandlerStack::create();
             $middleware = new Oauth1([
-                'consumer_key'    => $this->credentials['consumer_key'],
-                'consumer_secret' => $this->credentials['consumer_secret'],
-                'token'           => $this->credentials['token'],
-                'token_secret'    => $this->credentials['token_secret'],
-                'signature_method' => Oauth1::SIGNATURE_METHOD_HMACSHA256,
+                'consumer_key'      => $this->credentials['consumer_key'] ?? '',
+                'consumer_secret'   => $this->credentials['consumer_secret'] ?? '',
+                'token'             => $this->credentials['token'] ?? '',
+                'token_secret'      => $this->credentials['token_secret'] ?? '',
+                'signature_method'  => Oauth1::SIGNATURE_METHOD_HMACSHA256,
             ]);
-            $stack->push($middleware);
 
+            $stack->push($middleware);
             $clientOptions['handler'] = $stack;
             $clientOptions['auth'] = 'oauth';
-
         }
         return new Client($clientOptions);
     }
@@ -119,7 +116,7 @@ class RestApi implements RestApiInterface
         try {
             $options = $this->getAuthOptions();
 
-            if ($data !== null && $method === self::POST_REQUEST) {
+            if ($data !== null && in_array($method, [self::POST_REQUEST, self::PUT_REQUEST]) ) {
                 $options['body'] = json_encode($data);
             }
 
@@ -141,6 +138,22 @@ class RestApi implements RestApiInterface
     public function post(string $uri, array $data)
     {
         return $this->request(self::POST_REQUEST, $uri, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $uri, array $data)
+    {
+        return $this->request(self::PUT_REQUEST, $uri, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(string $uri)
+    {
+        return $this->request(self::DELETE_REQUEST, $uri);
     }
 
     /**
