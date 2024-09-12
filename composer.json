@@ -1,5 +1,5 @@
 {
-  "name": "salecto2/magento2-api",
+  "name": "bhoopatparmar/magento2-api",
     "description": "M2 API Library",
     "require": {
         "php": "^8.0",
